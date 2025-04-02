@@ -1,0 +1,18 @@
+# 数据文件
+*.csv
+*.npz
+*.npy
+
+# 缓存
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# 环境
+.env
+venv/
+ENV/
+
+# 评估结果
+evaluation_results/
