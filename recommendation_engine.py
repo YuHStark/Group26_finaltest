@@ -73,10 +73,9 @@ class RecommendationEngine:
         
         # Filter by maximum page count
         if 'book_pages' in filtered_df.columns:
-            if max_pages is None and length_level == "long":
-                filtered_df = filtered_df[filtered_df['book_pages'] >= 500]
-            # For short and medium books (with max_pages constraint)
-            elif max_pages and max_pages > 0:
+            if min_pages > 0:
+                filtered_df = filtered_df[filtered_df['book_pages'] >= min_pages]
+            if max_pages and max_pages > 0:
                 filtered_df = filtered_df[filtered_df['book_pages'] <= max_pages]
         
         # Filter by style (text search in description) if specified
@@ -178,9 +177,9 @@ class RecommendationEngine:
             DataFrame containing ensemble book recommendations
         """
         # Get recommendations from each algorithm
-        content_recs = self.content_based_filter(genre, style, min_rating, max_pages, top_n=top_n*2)
-        popularity_recs = self.popularity_rank_recommend(genre, min_rating, max_pages, top_n=top_n*2)
-        
+        content_recs = self.content_based_filter(genre, style, min_rating, max_pages, min_pages, top_n=top_n*2)
+        popularity_recs = self.popularity_rank_recommend(genre, min_rating, max_pages, min_pages, top_n=top_n*2)
+    
         # Combine and deduplicate recommendations
         # Using a scoring system that prioritizes books recommended by multiple algorithms
         all_books = pd.concat([
