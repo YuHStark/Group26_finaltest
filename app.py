@@ -89,7 +89,7 @@ def webhook():
         
         # Route to appropriate handler based on intent
         if intent == 'Default Welcome Intent':
-            return handle_welcom_intent()
+            return handle_welcome_intent()
         elif intent == 'Collect_Book_Genre':
             return handle_collect_genre(parameters)
         elif intent == 'Collect_Book_Style':
