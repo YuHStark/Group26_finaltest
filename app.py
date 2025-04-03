@@ -88,7 +88,9 @@ def webhook():
         print(f"Processing intent: {intent}")
         
         # Route to appropriate handler based on intent
-        if intent == 'Collect_Book_Genre':
+        if intent == 'Default Welcome Intent':
+            return handle_welcom_intent()
+        elif intent == 'Collect_Book_Genre':
             return handle_collect_genre(parameters)
         elif intent == 'Collect_Book_Style':
             return handle_collect_style(parameters)
@@ -100,7 +102,7 @@ def webhook():
             return handle_book_details(parameters)
         elif intent == 'Request_Similar_Books':
             return handle_similar_books(query_result)
-        elif intent == 'Request_New_Conversation':
+        elif intent == 'Request_New_Conversation - yes':
             return handle_new_conversation()
         elif intent == 'Goodbye':
             return handle_goodbye()
@@ -319,6 +321,11 @@ def handle_new_conversation():
     # This clears all previous contexts and starts fresh
     return jsonify({
         'fulfillmentText': 'Great! Let\'s start a new book recommendation. What genre are you interested in this time?'
+    })
+    
+def handle_welcome_intent():
+    return jsonify({
+        'fulfillmentText': 'Hello! I am book recommendation assistant. I can recommend books for you based on your preferences. May I ask what type of books you are interested in?'
     })
 
 def handle_goodbye():
