@@ -104,10 +104,10 @@ class RecommendationEngine:
         """
         # Calculate popularity score if not already in the dataframe
         if 'popularity_score' not in self.df.columns:
-            self.df['popularity_score'] = (
-                self.df['book_rating'] * self.df['book_rating_count']
-            ) / (self.df['book_rating_count'] + 10)
-        
+        self.df['popularity_score'] = (
+            self.df['book_rating'] * self.df['book_rating_count']
+        ) / (self.df['book_rating_count'] + 10)
+    
         filtered_df = self.df.copy()
         
         # Apply genre filter if specified
@@ -120,16 +120,18 @@ class RecommendationEngine:
         if min_rating > 0:
             filtered_df = filtered_df[filtered_df['book_rating'] >= min_rating]
         
-        # Apply page count filter
-        if max_pages and max_pages > 0:
-            if 'book_pages' in filtered_df.columns:
+        # Apply page count filters
+        if 'book_pages' in filtered_df.columns:
+            if min_pages > 0:
+                filtered_df = filtered_df[filtered_df['book_pages'] >= min_pages]
+            if max_pages and max_pages > 0:
                 filtered_df = filtered_df[filtered_df['book_pages'] <= max_pages]
         
         # Sort by popularity score
         filtered_df = filtered_df.sort_values(by='popularity_score', ascending=False)
         
         return filtered_df.head(top_n)
-    
+        
     def find_similar_books_knn(self, book_title, n=3):
         """
         Find books similar to the given book title using KNN.
@@ -177,9 +179,23 @@ class RecommendationEngine:
             DataFrame containing ensemble book recommendations
         """
         # Get recommendations from each algorithm
-        content_recs = self.content_based_filter(genre, style, min_rating, max_pages, min_pages, top_n=top_n*2)
-        popularity_recs = self.popularity_rank_recommend(genre, min_rating, max_pages, min_pages, top_n=top_n*2)
-    
+        content_recs = self.content_based_filter(
+            genre=genre, 
+            style=style, 
+            min_rating=min_rating, 
+            max_pages=max_pages,
+            min_pages=min_pages,  # Pass the min_pages parameter
+            top_n=top_n*2
+        )
+        
+        popularity_recs = self.popularity_rank_recommend(
+            genre=genre, 
+            min_rating=min_rating, 
+            max_pages=max_pages,
+            min_pages=min_pages,  # Pass the min_pages parameter
+            top_n=top_n*2
+        )
+        
         # Combine and deduplicate recommendations
         # Using a scoring system that prioritizes books recommended by multiple algorithms
         all_books = pd.concat([
