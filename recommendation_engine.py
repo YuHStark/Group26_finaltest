@@ -45,7 +45,7 @@ class RecommendationEngine:
         self.knn_model.fit(self.tfidf_matrix)
         print("KNN model initialized")
     
-    def content_based_filter(self, genre=None, style=None, min_rating=0, max_pages=None, top_n=5):
+    def content_based_filter(self, genre=None, style=None, min_rating=0, max_pages=None,min_pages=0,top_n=5):
         """
         Filter books based on content criteria.
         
@@ -89,7 +89,7 @@ class RecommendationEngine:
         
         return filtered_df.head(top_n)
     
-    def popularity_rank_recommend(self, genre=None, min_rating=0, max_pages=None, top_n=5):
+    def popularity_rank_recommend(self, genre=None, min_rating=0, max_pages=None,min_pages=0, top_n=5):
         """
         Recommend books based on popularity score.
         
@@ -164,7 +164,7 @@ class RecommendationEngine:
         
         return similar_books
     
-    def ensemble_recommendations(self, genre=None, style=None, min_rating=0, max_pages=None, top_n=5):
+    def ensemble_recommendations(self, genre=None, style=None, min_rating=0, max_pages=None,min_pages=0, top_n=5):
         """
         Combine multiple recommendation algorithms for better results.
         
