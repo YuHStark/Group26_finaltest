@@ -176,19 +176,23 @@ def handle_collect_length(parameters):
         return jsonify({
             'fulfillmentText': 'What length of book do you prefer? Short (under 300 pages), medium (300-500 pages), long (over 500 pages), or no preference?'
         })
+    
+    # Map rating level to numerical value
     min_rating = map_rating_level(rating_level)
     
-    # Map parameters to values
-    min_rating = None
-    max_pages = 0
-
+    # Set default page constraints
+    min_pages = 0
+    max_pages = None
+    
+    # Map length level to page constraints
     if length_level:
-        if length_level.lower() == "short":
+        length_level = length_level.lower()
+        if length_level == "short":
             max_pages = 300
-        elif length_level.lower() == "medium":
+        elif length_level == "medium":
             min_pages = 300
             max_pages = 500
-        elif length_level.lower() == "long":
+        elif length_level == "long":
             min_pages = 500
     
     # Get recommendations using ensemble method
