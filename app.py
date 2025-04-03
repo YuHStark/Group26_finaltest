@@ -256,15 +256,17 @@ def handle_book_details(parameters):
         desc = book_details['description']
         if len(desc) > 500:
             desc = desc[:500] + "..."
-        response_text += f"【Description】 {desc}\n\n"
+        response_text += "【Description】\n"
+        response_text += f"{desc}\n\n"
     
     response_text += f"【Author】 {book_details['author']}\n"
     response_text += f"【Genre】 {book_details['genres']}\n"
-    response_text += f"【Rating】 {book_details['rating']:.1f}"
     
     # Add rating count if available
     if book_details['rating_count'] > 0:
-        response_text += f" (based on {book_details['rating_count']} reviews)"
+        response_text += f"【Rating】 {book_details['rating']:.1f} (based on {book_details['rating_count']} reviews)\n"
+    else:
+        response_text += f"【Rating】 {book_details['rating']:.1f}\n"
     
     response_text += "\n"
     
@@ -307,8 +309,9 @@ def handle_similar_books(query_result):
     response_text = f"Here are some books similar to '{book_title}':\n\n"
     
     for _, book in similar_books.iterrows():
-        response_text += f"• {book['book_title']} – by {book['book_authors']}, "
-        response_text += f"rating: {book['book_rating']:.1f}\n"
+        response_text += f"• {book['book_title']}\n"
+        response_text += f"  Author: {book['book_authors']}\n"
+        response_text += f"  Rating: {book['book_rating']:.1f}\n\n"
     
     response_text += "\nWould you like me to recommend other types of books? (Yes to start a new recommendation, No to end our conversation)"
     
