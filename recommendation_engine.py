@@ -72,8 +72,11 @@ class RecommendationEngine:
             filtered_df = filtered_df[filtered_df['book_rating'] >= min_rating]
         
         # Filter by maximum page count
-        if max_pages and max_pages > 0:
-            if 'book_pages' in filtered_df.columns:
+        if 'book_pages' in filtered_df.columns:
+            if max_pages is None and length_level == "long":
+                filtered_df = filtered_df[filtered_df['book_pages'] >= 500]
+            # For short and medium books (with max_pages constraint)
+            elif max_pages and max_pages > 0:
                 filtered_df = filtered_df[filtered_df['book_pages'] <= max_pages]
         
         # Filter by style (text search in description) if specified
