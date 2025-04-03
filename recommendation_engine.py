@@ -104,9 +104,9 @@ class RecommendationEngine:
         """
         # Calculate popularity score if not already in the dataframe
         if 'popularity_score' not in self.df.columns:
-        self.df['popularity_score'] = (
-            self.df['book_rating'] * self.df['book_rating_count']
-        ) / (self.df['book_rating_count'] + 10)
+            self.df['popularity_score'] = (
+                self.df['book_rating'] * self.df['book_rating_count']
+            ) / (self.df['book_rating_count'] + 10)
     
         filtered_df = self.df.copy()
         
