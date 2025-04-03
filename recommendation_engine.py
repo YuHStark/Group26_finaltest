@@ -61,6 +61,16 @@ class RecommendationEngine:
         """
         filtered_df = self.df.copy()
         
+        filtered_df = filtered_df[filtered_df['genres'].notna() & (filtered_df['genres'] != '') & 
+                              (filtered_df['genres'].str.lower() != 'uncategorized')]
+    
+        
+        filtered_df = filtered_df[filtered_df['book_rating'].notna() & (filtered_df['book_rating'] > 0)]
+       
+        if 'book_pages' in filtered_df.columns:
+            filtered_df = filtered_df[filtered_df['book_pages'].notna() & (filtered_df['book_pages'] > 0)]
+        
+        
         # Filter by genre if specified
         if genre and genre != "":
             genre_pattern = re.compile(genre, re.IGNORECASE)
@@ -109,6 +119,16 @@ class RecommendationEngine:
             ) / (self.df['book_rating_count'] + 10)
     
         filtered_df = self.df.copy()
+        filtered_df = filtered_df[filtered_df['genres'].notna() & (filtered_df['genres'] != '') & 
+                              (filtered_df['genres'].str.lower() != 'uncategorized')]
+    
+
+        filtered_df = filtered_df[filtered_df['book_rating'].notna() & (filtered_df['book_rating'] > 0)]
+        
+
+        if 'book_pages' in filtered_df.columns:
+            filtered_df = filtered_df[filtered_df['book_pages'].notna() & (filtered_df['book_pages'] > 0)]
+        
         
         # Apply genre filter if specified
         if genre and genre != "":
@@ -246,6 +266,7 @@ class RecommendationEngine:
         
         # Return the first matching book's details
         book = book.iloc[0]
+        genres = book['genres'] if 'genres' in book and book['genres'] and book['genres'].lower() != 'uncategorized' else 'General Fiction'
         
         # Gather all available details
         details = {
